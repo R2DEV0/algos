@@ -1,7 +1,6 @@
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+{
 // Overview
 // My implementation of a singly-linked list in JavaScript
 // This file contains two classes (SLNode and SLList)
@@ -15,20 +14,18 @@
     // g. editAt(idx) -> Returns the node at the idx position in the list
     // h. hasCycle() -> Returns boolean based on whether or not a cycle exists
     // i. printList() -> Returns this, console.logs node.value for all nodes in list
-
+}
     class SLNode {
         constructor(value){
             this.value = value;
             this.next = null;
         }
     }
-    
     class SLList {
         constructor(){
             this.head = null;
         }
         isEmpty(){ return this.head === null; }
-    
         addToBack(value){
             let newNode = new SLNode(value);
             if (this.isEmpty()){
@@ -43,7 +40,6 @@
             }
             return this;
         }
-
         addToFront(value){
             let newNode = new SLNode(value);
             let currentHead = this.head;
@@ -51,8 +47,6 @@
             this.head = newNode;
             return this
         }
-
-
         removeFromFront(){
             // Removes the head and returns its value
             if (this.isEmpty()){
@@ -64,7 +58,7 @@
             currentHead.next = null;
             return currentHead.value
         }
-                                                    removeFromBack(){
+        removeFromBack(){
                                                         if (this.isEmpty()){
                                                             console.log("This list is empty.")
                                                             return this;
@@ -79,9 +73,8 @@
                                                             current.next = null;
                                                             return runner.value;
                                                         }
-                                                    }
-
-                                                    contains(val){
+        }
+        contains(val){
                                                         if (this.isEmpty()){
                                                             console.log("This list is empty.")
                                                             return this;
@@ -96,9 +89,8 @@
                                                             }
                                                         }
                                                         return false;
-                                                    }
-
-                        removeNode(val){
+        }
+        removeNode(val){
                             if (this.isEmpty()){
                                 console.log("This list is empty.")
                                 return this;
@@ -122,8 +114,7 @@
                                 }
                             }
                             return("List does not contain that value")
-                        }
-
+        }
         editAt(idx){
             if (this.isEmpty()){
                 console.log("The list is empty.")
@@ -137,7 +128,6 @@
             }
             return runner
         }
-
         insertAt(value, idx){
             if (this.isEmpty() || idx === 0 || idx === 1){
                 this.addToBack(value);
@@ -167,14 +157,11 @@
                 console.log("The list is empty.")
                 return this;
             }
-
             let slowRunner = this.head;
             let fastRunner = this.head;
-
             while (slowRunner.next !== null){
                 slowRunner = slowRunner.next;
                 fastRunner = fastRunner.next.next;
-
                 if (slowRunner === fastRunner){
                     console.log("The list has a cycle.")
                     let cycle = []
@@ -185,9 +172,7 @@
                         cycleMap[slowRunner.value] = slowRunner
                         slowRunner = slowRunner.next
                     }
-
                     console.log(`There is a cycle involving the following ${cycle.length} elements: ${cycle}.`)
-
                     // find cycle start
                     let cycleStart = this.head
                     let startIdx = 1;
@@ -214,16 +199,13 @@
                     }
                     let cycleEnd = cycleRunner
                     console.log(`The cycle ends at position ${endIdx}, which has a value of ${cycleEnd.value}`)
-                    
                     console.log(endIdx)
                     return true
                 }
             }
             console.log("There is no cycle in this list.")
             return false
-
         }
-
         printList(){
             if (this.isEmpty()){
                 console.log("List is empty.")
@@ -238,8 +220,6 @@
             console.log(line)
             return this        
         }
-
-
         // return the 2nd to last value in a list //
         secondToLast(){
             let runner = this.head;
@@ -248,7 +228,6 @@
             }
             return runner.value;
         }
-
         // concat 2 list
         concat(list){
             let listHead = list.head;
@@ -259,8 +238,124 @@
             }
             return this;
         }
+    // Write a method that will reverse the singly linked list.
+    // Note that this will entail reversing the pointers of each node to its
+    // previous node, and setting what WAS the last node to be the new head.
+
+    // I STRONGLY encourage attempting to use recursion for this method. If you 
+    // choose not to, this task will require three pointers.
+    reverse(head) 
+    {
+        if(head == null){
+            return head;
+        }
+        if(head.next == null){
+            return head;
+        }
+        let newHeadNode = reverse(head.next);
+        head.next.next =  head;
+        head.next = null;
+        return newHeadNode;
+    }
+    reverseHydra(){
+        if(this.isEmpty()){
+            console.log("It's empty!")
+            return this;
+        }
+        else if(this.head.next==null){
+            console.log("It's only one long. It's already reversed!")
+            return this;
+        }
+        let previousNode = this.head;
+        let currentNode = this.head.next;
+        previousNode.next = null;
+        if(currentNode.next == null){
+            currentNode.next = previousNode;
+            this.head = currentNode;
+            return this;
+        }
+        else{
+            let runner = currentNode.next;
+            while(runner.next!==null){
+                currentNode.next=previousNode;
+                previousNode = currentNode;
+                currentNode = runner;
+                runner = currentNode.next;
+            }
+            currentNode.next = previousNode;
+            runner.next = currentNode;
+            this.head = runner;
+            return this;
+        }
+    }
+
+    // return bool if singly linked list has a loop or not //
+    hasLoop(first) {
+        let slow = first;
+        let fast = first;
+        while(fast != null && fast.next != null) {
+            slow = slow.next; 
+            fast = fast.next.next;
+    
+            if(slow == fast)
+                return true;
+        }
+        return false; 
+    }
+
+    // remove dupes from a sorted list 1,2,3,4,4,5,5,6 //
+    removeDupesSorted(){
+        let runner = this.head;
+        while(runner.next !== null){
+            if(runner.next.value == runner.value){
+                runner.next = runner.next.next;
+            }
+            else{
+                runner = runner.next;
+            }
+        return this;
+        }
+    }
+
+    // remove any negative values from a list -1,2,3,-4//
+    removeNegatives(){
+        if (this.isEmpty()){
+            console.log("This list is empty.")
+            return this;
+        }
+        else{
+            let runner = this.head;
+            while (runner.next !== null){
+                if(runner.next.value < 0){
+                    runner.next = runner.next.next;
+                    console.log("negative value has been removed")
+                }
+                if(runner.value < 0){
+                    let currentHead = this.head;
+                    this.head = currentHead.next;
+                    currentHead.next = null;
+                    console.log("negative value has been removed")
+                }
+                runner = runner.next;
+            }
+            return this;
+        }
+    }
+
+}
 
 
+
+
+
+
+    // Write a method that will return the second to last node in the singly linked list.
+
+    //EXAMPLE: myList = 7 -> 5 -> 3 -> 10 -> 1 -> 
+    // calling myList.secondToLast() would return the 10 -> node
+    
+
+{
         // splits a list in 2 on a given value //
         // splitOnVal(val){
         //     let runner = this.head;
@@ -272,30 +367,239 @@
         //         }
         //     return("value is not in list");
         // }
-
+}
+    class Stack{
+        constructor(){
+            this.data = new SLList();
+        }
+        // push value to front of stack //
+        push(value){
+            this.data.addToFront(value);
+            return this;
+        }
+        // remove value from stack //
+        pop(value){
+            this.data.removeNode(value);
+            return this;
+        }
+        // return value of node on top of the stack //
+        peek(){
+            return this.data.head.value;
+        }
+        // return bool if stack is empty or not //
+        isEmpty(){
+            return this.data.isEmpty();
+        }
+        // returns how many elements are in stack //
+        size(){
+            var size = 0;
+            var runner = this.data.head;
+            while (runner != null){
+                size++;
+                runner = runner.next;
+            }
+            return size;
+        }
+    }
+class Queue {
+    constructor(){
+        this.data = new SLList();
     }
 
+    // Write a method that adds to the queue using the methods built already
+    // in the SLList class
+    enqueue(value) {
+        return this.data.addToBack(value);
+    }
+
+
+    // Write a method that removes from the queue using the methods built already 
+    // in the SLList class
+    dequeue() {
+        return this.data.removeFromFront();
+    }
+
+    // Write a method that returns the node at the front of the queue using 
+    // what we know about Singly Linked Lists
+    front() {
+        if(this.isEmpty()){
+            console.log("Queue is empty");
+            return null;
+        }
+        return this.head;
+    }
+
+    // This one should be self explanatory
+    isEmpty() {
+        return this.data.isEmpty();
+    }
+
+    // Write a method that returns the number of items in our queue
+    size() {
+        let count = 0;
+        let runner = this.data.head;
+        while(runner != null) {
+            runner = runner.next;
+            count++;
+        }
+        return count;
+    }
+}
+class QueueStack {
+    constructor(){
+        // Basically, stack 1 is going to be where all the data actually resides
+        this.stack1 = new Stack();
+        // Stack 2 is just going to be used when we need it to shift things around.
+        this.stack2 = new Stack();
+    }
+
+    // Using the methods we built into the stack class, write a method that
+    // adds a new node to the queue with the passed in value
+    enqueue(value){
+        this.stack1.push(value)
+    }
+
+    // Using the methods we built into the stack class, write a method that
+    // will remove a node from the queue
+    dequeue(){
+        
+        // Pop elements from stack 1 and load stack 2
+        while (this.stack1.size() > 0){
+            let value = this.stack1.pop()
+            this.stack2.push(value)
+        }
+        let output = this.stack2.pop()
+        
+        while (this.stack2.size() > 0){
+            this.stack1.push(this.stack2.pop())
+        }
+        return output
+    }
+}
+{
+const QS = new QueueStack();
+
+QS.enqueue(15)
+QS.enqueue(20)
+QS.enqueue(30)
+
+console.log(QS)
+}
+{
+/* THE GOOGLE ROBOT INTERVIEW QUESTION!!
+Scientists have opened a portal to another dimension.
+In that dimension, the plane of existence is just an infinite line.
+Scientists want to send two robots through to do something. Idk what.
+But when they are sent through this portal, they don't enter that plane of existence
+in the same place. In fact, they land in entirely different places. 
+Because this is a weird place, the robots actually land on top of the parachutes they 
+used to float down (??? I know) 
+For some reason, these scientists forgot to put any significant amount of money towards
+the software development side of this experiment.
+So here's the deal. Two robots, land on top of their parachutes, and have exactly the same code on them.
+The code can comprise of a combination of our basic tool kit (setting variables, for loops, while
+
+loops, if/else if/else checks, etc.), and a handful of predefined methods, which are as follows:
+moveLeft(){} -> Moves the robot to the left one unit of distance in one unit of time.
+
+moveRight(){} -> Moves the robot to the right one unit of distance in one unit of time.
+
+wait(){} -> The robot stays in place for one unit of time.
+
+parachuteCheck(){} -> Returns a boolean for whether or not the robot is currently on top of a parachute. Takes 
+one unit of time.
+
+robotCheck(){} -> Returns a boolean for whether or not the robot has found another robot. Takes one unit 
+of time.
+
+A piece of clarification!!
+When I say the same code is on both robots, what I mean is that the program runs on both robots.
+So if the program is just
+moveLeft();
+Both robots will move left.
+SO!!! The goal is to write a program that GUARANTEES (this assumes the robots have an infinite power source)
+that they will find each other.
+*/
+
+// var distance = 1
+// var parachute = "My parachute";
+// while robotcheck(); == false
+//     while paracheck(); == true;
+//         for(i=0; i<distance; i++)
+//             move right by 1
+//             parachuteCheck();
+//             robotcheck();
+//         distance +1;
+//         for(i=0; i<distance;  i++)
+//             move left by 1
+//             parachuteCheck();
+//             robotcheck();
+//         distance +1;
+}
+{
+var myStack = new Stack();
+myStack.push(5);
+myStack.push(7)
+myStack.push(10)
+myStack.push(2);
+
+myStack.data.printList();
+
+myStack.pop(5)
+
+myStack.data.printList();
+
+console.log("Value at top of Stack:"+" "+ myStack.peek());
+console.log("Stack is empty:" +" "+ myStack.isEmpty());
+console.log("Amount of elements in Stack:" +" "+ myStack.size());
+}
+
     const list1 = new SLList()
-    list1.addToBack(5)
-    list1.addToBack(6)
-    list1.addToBack(2)
-    list1.addToBack(3)
-    list1.addToBack(9)
-    list1.addToBack(4)
+    list1.addToBack(5).addToBack(6).addToBack(2).addToBack(3).addToBack(9).addToBack(4)
+
+    list1.head.next.next.next.next.next = myList.head.next.next;
+
+    console.log(list1.hasLoop(5));
+
+
+    // console.log(list1.reverse(5))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // console.log(list1.secondToLast())
 
-    const list2 = new SLList()
-    list2.addToBack(10)
-    list2.addToBack(20)
-    list2.addToBack(30)
-    list2.addToBack(40)
-    list2.addToBack(60)
-    list2.addToBack(70)
-    list2.addToBack(80)
-    list2.addToBack(90)
+    // const list2 = new SLList()
+    // list2.addToBack(10)
+    // list2.addToBack(20)
+    // list2.addToBack(30)
+    // list2.addToBack(40)
+    // list2.addToBack(60)
+    // list2.addToBack(70)
+    // list2.addToBack(80)
+    // list2.addToBack(90)
 
-    console.log(list1.concat(list2));
+
+    // console.log(list1.concat(list2));
 
     // console.log(list1.contains(4));
 
@@ -329,12 +633,8 @@
     // let idx = list2.hasCycle()
     // list2.editAt(idx).next = null;
     // list2.hasCycle()
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-
+{
 // Find the longest SubString with no repeats
 
 // str1 = "bca"
@@ -366,14 +666,8 @@
 //   return count >mySet.size? count: mySet.size;
 // }
 // console.log(maxSubStringCount(str4));
-
-
-
-
-// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
   https://leetcode.com/problems/compare-version-numbers/
   Given two strings, version1, and version2, both representing version numbers
